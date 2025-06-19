@@ -1,46 +1,48 @@
-
-# Imagine que você foi contratado para desenvolver um sistema inovador de
-# gerenciamento de reservas para um hotel boutique em uma cidade turística.
-
-# O hotel, conhecido como "Refúgio dos Sonhos"
-
-# , precisa de um sistema que
-# permita gerenciar a disponibilidade dos quartos, as reservas dos hóspedes e
-# os dados dos clientes de forma eficiente e intuitiva.
-
-# Sua missão é criar uma aplicação interativa que atenda a essas necessidades
-# utilizando Programação Orientada a Objetos (POO) e a biblioteca Flet para
-# a interface gráfica.
-
-#___________________________________________________________________________________________
-
-# Utilize o Flet para construir uma interface gráfica que contenha as seguintes estruturas:
-
-# Tela de visualização de reservas:
-# Apresente uma lista de reservas existentes com a
-# opção de cancelar reservas específicas.
-
-# Tela inicial:
-# Exiba uma lista de quartos e suas respectivas
-# disponibilidades.
-# Inclua botões para realizar reservas, consultar
-# informações de clientes e gerenciar reservas.
-
-# Formulário de reserva:
-# Permita que o usuário escolha o cliente, o quarto e
-# as datas desejadas para criar uma nova reserva.
-
-# Gerenciamento de clientes:
-# Inclua uma tela para visualizar, adicionar e editar
-# informações dos clientes.
-
 import flet as ft
-from model import *
 
-def main(page:ft.Page):
-    pass
- 
-if __name__=="__main__":
-    ft.app(target=main)
+def main(page: ft.Page):
+    quartos = [
+        {"Tipo": "Simples", "Numero": 101, "Disponivel": True},
+        {"Tipo": "Luxo", "Numero": 102, "Disponivel": False},
+        {"Tipo": "Executiva", "Numero": 103, "Disponivel": True}
+    ]
 
+    page.title = "Reservas para um Hotel Boutique"
+    page.window.width = 500
+    page.window.max_width=500
+    page.window.height = 600
+    page.horizontal_alignment = "center"
+    page.vertical_alignment = "top"
 
+    titulo = ft.Text("🏨 Reservas para um Hotel Boutique", size=20)
+    lista_quartos = []
+
+    for quarto in quartos:
+        status = "✅ Disponível" if quarto["Disponivel"] else "❌ Indisponível"
+        lista_quartos.append(
+            ft.Row([
+                ft.Text(f"Quarto {quarto['Numero']} ({quarto['Tipo']}) : {status}", size=18),
+                ft.ElevatedButton("Reservar", disabled=not quarto["Disponivel"])
+            ],
+            alignment="spaceBetween")
+        )
+
+    info_cliente = ft.ElevatedButton("Informações de clientes")
+    gerenciar_reservas = ft.ElevatedButton("Gerenciar reservas")
+
+    page.add(
+        ft.Container(
+            content=ft.Column([
+                titulo,
+                *lista_quartos,
+                ft.Row([info_cliente, gerenciar_reservas], alignment="center")
+            ],
+            horizontal_alignment="center",
+            spacing=20),
+            padding=20,
+            width=500,
+            alignment=ft.alignment.center
+        )
+    )
+
+ft.app(target=main)
